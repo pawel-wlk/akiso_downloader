@@ -11,7 +11,8 @@ if [ "2" -gt `curl -s -S -u "$user:$password" "http://cs.pwr.edu.pl/zawada/akiso
  exit 1
 fi
 
-listawykladow=(`curl -s -S http://cs.pwr.edu.pl/zawada/akiso/ | grep 'download' | grep 'Wykład' | sed -E 's/.*"download\/([0-9]{8})">.*/\1/'`) 
+listawykladow=(`curl -s -S http://cs.pwr.edu.pl/zawada/akiso/ | grep -E -o 'download/[0-9]{8}' | sed 's/download\///' `)
+echo  $listawykladow
 rm -r "wyklady/" 2>/dev/null
 mkdir "wyklady"
 

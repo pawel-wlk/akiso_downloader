@@ -19,6 +19,8 @@ mkdir "wyklady"
 for wyklad in "${listawykladow[@]}"
 do
     listaplikow=(`echo $wyklad | sed -E 's/(.*)/http:\/\/cs.pwr.edu.pl\/zawada\/akiso\/download\/\1\//' | xargs -n 1 curl -s -S -u "$user:$password" | grep "<img" | sed -e 's/" .*//' -e 's/.*"//'`)
+
+    touch wyklady/$wyklad.txt
     
     ponow=1
 
@@ -36,6 +38,8 @@ do
         nazwa=$wyklad"/"$licznik".png"
         `echo $plik | sed -E "s/(.*)/http:\/\/cs.pwr.edu.pl\/zawada\/akiso\/download\/$wyklad\/\1/" | xargs -n 1 curl -s -S -u "$user:$password" -o $nazwa`
         konwerter=$konwerter" -adjoin "$nazwa" "
+
+        tesseract $nazwa stdout >> wyklady/$wyklad.txt 2> /dev/null
         echo -n "|"
       done
 
